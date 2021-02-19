@@ -83,9 +83,41 @@ Run `npm run test`
 
 #### Swift
 
+Install and configure Ruby.
+
+`brew install ruby`
+
+```
+# ruby
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+# Based on `gem environment gemdir`
+export PATH="/usr/local/lib/ruby/gems/3.0.0/bin:$PATH"
+```
+
+Run tests and generate coverage.
+
 ```
 cd example-swift
 gem install slather
+open SwiftExample.xcodeproj/
+```
 
+- `Product` -> `Scheme` -> `Edit Scheme`.
+- Click on the `Test` target and select `Options...`
+- Verify the `Code Coverage` box is checked and it says `Gather coverage for all targets`
+- Add new Scheme `SwiftExampleTests` and ensure the `Shared` box is checked
+- Enable coverage for the newly added scheme
+
+Run the tests:
 
 ```
+xcodebuild test -scheme SwiftExampleTests -destination 'platform=iOS Simulator,name=iPhone 12,OS=latest' -derivedDataPath output
+```
+
+Process coverage
+
+```
+slather coverage -x --build-directory output --scheme SwiftExampleTests --binary-basename SwiftExample SwiftExample.xcodeproj
+```
+
+The coverage will be in `cobertura.xml`
